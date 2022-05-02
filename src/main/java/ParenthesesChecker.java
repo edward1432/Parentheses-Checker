@@ -9,29 +9,21 @@ public class ParenthesesChecker {
     }
     public boolean checkParentheses(String string){
 
-        String[] letters = string.split("");
-        List<Character> openingBrackets;
-        List<Character> closingBrackets;
+        List<Character> openingBrackets = Arrays.asList('(', '<', '{', '[');
+        List<Character> closingBrackets = Arrays.asList(')', '>', '}', ']');
+        Stack<Character> foundOpeningBrackets = new Stack<>();
 
-        openingBrackets = Arrays.asList('(', '<', '{', '[');
-        closingBrackets = Arrays.asList(')', '>', '}', ']');
-        int openingBracketsCount = 0;
-        int closingBracketsCount = 0;
-
-        for (String letter : letters){
+        for (Character letter : string.toCharArray()){
             if (openingBrackets.contains(letter)) {
-                openingBracketsCount++;
+                foundOpeningBrackets.push(letter);
             }
             if (closingBrackets.contains(letter)) {
-                closingBracketsCount++;
-            }
-            if (closingBracketsCount > openingBracketsCount){
-                return false;
+                if (foundOpeningBrackets.isEmpty() || openingBrackets.indexOf(foundOpeningBrackets.peek()) != closingBrackets.indexOf(letter)) {
+                    return false;
+                }
+                foundOpeningBrackets.pop();
             }
         }
-
-        if (openingBracketsCount != closingBracketsCount){
-            return false;
-        } else return true;
+        return foundOpeningBrackets.isEmpty();
     }
 }
